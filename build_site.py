@@ -14,6 +14,7 @@ NAV = [
     ("index", "Home"),
     ("about", "About"),
     ("programs", "Programs"),
+    ("mural", "Mural"),
     ("mens-gathering", "Men's Gathering"),
     ("research", "Research"),
     ("get-involved", "Get Involved"),
@@ -27,10 +28,9 @@ def header(active):
         for s, l in NAV
     )
     return f"""<header class="site-header"><div class="wrap">
-  <a class="brand" href="index.html">IZCALLI<small>House of Re-awakening</small></a>
+  <a class="brand" href="index.html"><img src="assets/img/logo.png" alt="Izcalli"></a>
   <nav class="nav">{links}
     <a class="btn" href="donate.html">Donate</a>
-    <span class="lang"><button class="on" type="button">EN</button><button type="button" onclick="esNote()">ES</button></span>
   </nav>
 </div></header>"""
 
@@ -56,8 +56,7 @@ FOOTER = """<footer class="site-footer"><div class="wrap">
     <span>&copy; %YEAR% Izcalli. A federally recognized 501(c)(3) since 2004 &middot; EIN 33-0971908.</span>
     <span>Prototype &mdash; content under review.</span>
   </div>
-</div></footer>
-<script>function esNote(){alert("La versi\\u00f3n en espa\\u00f1ol est\\u00e1 en camino. The Spanish version of this site is coming soon.");}</script>""".replace("%YEAR%", str(datetime.date.today().year))
+</div></footer>""".replace("%YEAR%", str(datetime.date.today().year))
 
 def page(slug, title, body, active=None):
     active = active or slug
@@ -106,11 +105,13 @@ home = """
 <section class="section alt">
   <div class="wrap">
     <p class="kicker center">What We Do</p>
-    <div class="grid cols-4">
+    <div class="grid cols-3">
       <div class="card"><img src="assets/img/healing-circle.jpg" alt="Indigenous healing circle"><div class="body"><h3>Healing Circles</h3><p>Weekly Indigenous circles &mdash; C&iacute;rculo de Hombres and Cihua Ollin &mdash; in schools and community settings.</p></div></div>
+      <div class="card"><a href="programs.html"><img src="assets/img/restorative-theater.jpg" alt="Youth performing original theater at Chicano Park"></a><div class="body"><h3>Restorative Theater</h3><p>Youth from Barrio Logan and Logan Heights create and perform original theater on the theme of freedom at the Chicano Park Museum.</p></div></div>
       <div class="card"><img src="assets/img/teatro.jpg" alt="Teatro Izcalli performers"><div class="body"><h3>Teatro Izcalli</h3><p>A Chicana/o comedy troupe carrying the tradition of La Carpa and Teatro Campesino since 1995.</p></div></div>
-      <div class="card"><img src="assets/img/cihua-ollin.jpg" alt="Tlahtolli youth cohort"><div class="body"><h3>Tlahtolli</h3><p>Restorative rites-of-passage curriculum and trainings for educators and community leaders.</p></div></div>
+      <div class="card"><img src="assets/img/training.jpg" alt="Tlahtolli training circle"><div class="body"><h3>Tlahtolli</h3><p>Restorative rites-of-passage curriculum and trainings for educators and community leaders.</p></div></div>
       <div class="card"><img src="assets/img/hero-circle.jpg" alt="Annual Men's Gathering fire"><div class="body"><h3>Men's Gathering</h3><p>An annual multi-generational gathering on Kumeyaay land, paired with Cihua Ollin.</p></div></div>
+      <div class="card"><a href="mural.html"><img src="assets/img/mural.jpg" alt="The Izcalli mural at Chicano Park"></a><div class="body"><h3>The Izcalli Mural</h3><p>Our mural at Chicano Park carries Izcalli's name and Maya-Nahua imagery into the heart of Barrio Logan.</p></div></div>
     </div>
     <p class="center" style="margin-top:28px"><a class="btn" href="programs.html">See all programs</a></p>
   </div>
@@ -162,6 +163,54 @@ about = """
 
 <section class="section alt">
   <div class="wrap">
+    <p class="kicker">Our People</p>
+    <h2>Board &amp; Staff</h2>
+    <h3 style="margin-top:18px">Executive Leadership</h3>
+    <div class="bios">
+      <div class="bio">
+        <h3>Macedonio Arteaga Jr.</h3>
+        <p class="role">Co-Founder &amp; Executive Director</p>
+        <p>Macedonio Arteaga Jr. is the architect of Izcalli's healing framework and the primary relationship holder with the school districts, county offices, and community networks that make its work possible. For 21 years he served as a Restorative Practices Pupil Advocate within the San Diego Unified School District's Department of Race, Human Relations and Advocacy, leading the district's restorative practices initiative, developing its first Chicana/o Studies course, and training staff district-wide in trauma-informed, culturally relevant instruction. He is a senior facilitator and National Trainer for the National Compadres Network, one of the most respected Latino-serving networks in the United States, through which he has trained practitioners across the country in Indigenous-rooted restorative practice. He is the 2024 Leader in Belonging Awardee (Prebys Foundation) and was honored by the City of San Diego, which proclaimed "Macedonio Arteaga Day" on February 27, 2007. As Executive Director, Mr. Arteaga provides the programmatic vision, community trust, and district-level access at the heart of Izcalli's work.</p>
+      </div>
+      <div class="bio">
+        <h3>Alicia Chavez-Arteaga</h3>
+        <p class="role">Co-Founder &amp; Director of Operations</p>
+        <p>Alicia Chavez-Arteaga holds a Master of Arts in Women's Studies and a Bachelor of Science in Social Work, both from San Diego State University, and brings over 20 years of nonprofit administration experience to Izcalli's operations. As Director of Operations, she oversees compliance, financial systems, and program logistics. Earlier in her career she managed the wellness center at a San Diego high school, giving her firsthand operational knowledge of the school sites where Izcalli's circles are delivered. Her academic background in social work and gender equity ensures that Izcalli's programming is grounded in evidence-based frameworks and responsive to the specific needs of girls, non-binary youth, and others underserved by traditional mental health systems. As Director of Operations, Ms. Chavez-Arteaga is the organizational anchor ensuring Izcalli's work is executed with precision.</p>
+      </div>
+    </div>
+    <h3 style="margin-top:28px">Board of Directors</h3>
+    <div class="bios">
+      <div class="bio">
+        <h3>Mirna Hernandez</h3>
+        <p class="role">Board President</p>
+        <p>Mirna Hernandez is an Assistant Principal within the Escondido Union High School District and holds a Master's degree in Educational Leadership from California State University San Marcos and a Bachelor's degree in Kinesiology with a minor in Chicana/o Studies from San Diego State University. With over two decades of experience in student achievement, curriculum design, and school administration, she has been a core Izcalli leader since the organization's early years, previously serving as Camp Director for the Izcalli Youth Leadership Camp. As Board President, Ms. Hernandez provides expert guidance on youth development and educational policy, and her active role within the regional school system gives Izcalli direct insight into how its school-embedded model can best serve students' social-emotional and mental health needs.</p>
+      </div>
+      <div class="bio">
+        <h3>Viviana Ochoa, CPA</h3>
+        <p class="role">Board Treasurer</p>
+        <p>Viviana Ochoa is a high-level auditing and governance expert with over 25 years of experience in the public accounting and defense sectors. She currently manages the internal controls function for Science Applications International Corporation (SAIC), a $6B technology leader. Her background includes directing international audits for government and nonprofit organizations across Latin America, ensuring rigorous compliance and fiscal integrity in complex environments. A veteran of nonprofit leadership, Viviana has served in executive roles for the Mexican American National Association of San Diego and the Association of Latino Professionals For America. She recently completed three terms as a board member for the Metropolitan Area Advisory Committee on Anti-Poverty and currently serves on the audit committee for the ACLU of San Diego &amp; Imperial Counties. With an accounting degree from San Diego State University and a Board of Director Certificate from the University of San Diego, Viviana provides Izcalli with elite financial oversight.</p>
+      </div>
+      <div class="bio">
+        <h3>Dr. Ryan Santos</h3>
+        <p class="role">Board Secretary</p>
+        <p>Dr. Ryan Santos is a veteran educational leader with over 20 years of experience dedicated to student advocacy and social justice in the San Diego region. Currently serving as Principal of Bayfront Charter High School in Chula Vista, Dr. Santos has played a pivotal role in the design and opening of innovative new middle and high school environments. A distinguished scholar-practitioner, he earned his Ph.D. in Education from Claremont Graduate University. His expertise in democratic schooling and restorative practices extends to higher education, where he has taught graduate-level courses at San Diego State University and the University of San Diego. As Secretary of the Izcalli Board, Dr. Santos helps ensure that Izcalli's Indigenous-rooted programs are academically rigorous, operationally sound, and strategically integrated into the educational systems serving today's youth.</p>
+      </div>
+      <div class="bio">
+        <h3>Dr. Francisco Mendoza, M.D.</h3>
+        <p class="role">Board Member</p>
+        <p>Dr. Francisco Mendoza is the Lead Physician at AltaMed Medical and Dental Group &mdash; Santa Ana Main, one of the nation's largest Federally Qualified Health Centers. A Family Medicine specialist, his practice centers on health equity, mental health, and social justice. Dr. Mendoza's personal narrative, from navigating the United States as an undocumented immigrant to becoming a lead physician, aligns with Izcalli's mission of reclaiming one's story. He holds a bachelor's degree from UCLA and a medical degree from the UC Davis School of Medicine, followed by a residency at Harbor-UCLA Medical Center. A dedicated advocate for MiMentor and the Alliance in Mentorship, he works extensively to build professional pipelines for underrepresented students. As an Izcalli board member, Dr. Mendoza bridges clinical medicine and cultural wellness.</p>
+      </div>
+      <div class="bio">
+        <h3>Victor Chavez Jr.</h3>
+        <p class="role">Board Member</p>
+        <p>Victor M. Chavez Jr. has nearly 30 years of experience in the nonprofit sector (EYE Counseling &amp; Crisis Services, YMCA of San Diego County) and higher education (San Diego Mesa College, UC San Diego, Cal State Fullerton, and Los Angeles City College). He holds a bachelor's degree in History (minor in Political Science) from UC San Diego and a Master's degree in Public Administration from the University of Washington. Victor is a graduate of the Chicano Federation of San Diego County's Leadership Training Institute (Class XV) and the Latino Academy of the William C. Vel&aacute;squez Institute.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
     <p class="kicker">Our Approach</p>
     <h2>An Indigenous-led model of healing</h2>
     <p class="lead" style="max-width:70ch">Izcalli heals intergenerational trauma and dehumanization &mdash; particularly among BIPOC youth &mdash; through a community-based, Indigenous-led model rooted in Maya-Nahua philosophy and a 7,000-year-old ma&iacute;z-based culture.</p>
@@ -176,7 +225,7 @@ about = """
   </div>
 </section>
 
-<section class="section">
+<section class="section alt">
   <div class="wrap">
     <h2>Our Story</h2>
     <ul class="timeline">
@@ -192,7 +241,7 @@ about = """
   </div>
 </section>
 
-<section class="section alt">
+<section class="section">
   <div class="wrap">
     <h2>Recognition</h2>
     <ul class="recog clean">
@@ -203,7 +252,6 @@ about = """
       <li>"Nopal Boy &amp; Other Actos" published (2010)</li>
       <li>California Association of Teachers of English Award of Merit</li>
     </ul>
-    <p style="margin-top:24px"><a class="btn" href="contact.html">Meet our board &amp; staff</a></p>
   </div>
 </section>
 """
@@ -244,19 +292,60 @@ programs = """
 </div></section>
 
 <section class="section alt"><div class="wrap split">
-  <img src="assets/img/youth.jpg" alt="Youth at a gathering">
+  <img src="assets/img/restorative-theater.jpg" alt="Youth performing original theater at Chicano Park">
   <div>
-    <h2>Youth Leadership &amp; Steering Committee</h2>
-    <p>Youth shape program design, budgeting, fundraising, social media, and documentation. A new Youth Steering Committee is forming.</p>
+    <h2>Restorative Theater &mdash; Youth Theater at Chicano Park</h2>
+    <p>In partnership with the Chicano Park Museum and Cultural Center, Izcalli brings young people from Barrio Logan and Logan Heights together to create and perform original live theater on the theme of freedom. Guided by professional teaching artists using the Tlahtolli curriculum &mdash; Izcalli's evidence-based, culturally responsive Creative Youth Development framework &mdash; participants (ages 11&ndash;22) develop artistic voice, claim the stage, and speak their truth to thousands of community members.</p>
+    <p>Culminating performances at Barrio Station and Chicano Park Day put youth in front of broad San Diego audiences, transforming the narrative of their neighborhoods from one of burden to one of resilience and self-determination. Returning participants step into student leadership, mentoring peers and running production.</p>
   </div>
 </div></section>
 
-<section class="section"><div class="wrap">
+<section class="section"><div class="wrap split">
+  <img src="assets/img/youth.jpg" alt="Youth at a gathering">
+  <div>
+    <h2>Youth Leadership</h2>
+    <p>Youth shape program design, budgeting, fundraising, social media, and documentation, and grow into student leaders and facilitators across Izcalli's programs.</p>
+  </div>
+</div></section>
+
+<section class="section alt"><div class="wrap">
   <h2>Cultural events &amp; traditions</h2>
   <p class="lead" style="max-width:72ch">A non-commercialized annual Day of the Dead celebration, traditional instrument-making (Huehuetl, Teponaxtli), songs, storytelling, beadwork, woodcarving, regalia (Tilma), and inter-tribal ceremonies.</p>
 </div></section>
 """
 page("programs", "Programs", programs)
+
+# ----------------------------------------------------------------------------
+# MURAL
+# ----------------------------------------------------------------------------
+mural = """
+<section class="pagehead"><div class="wrap">
+  <p class="kicker">The Izcalli Mural</p>
+  <h1>Our name lives at Chicano Park.</h1>
+  <p>In the heart of Barrio Logan, Izcalli's mural takes its place among the most storied murals in the country.</p>
+</div></section>
+
+<section class="section"><div class="wrap split">
+  <div>
+    <h2>Chicano Park</h2>
+    <p>Beneath the San Diego&ndash;Coronado Bridge in Barrio Logan lies Chicano Park, one of the most significant sites of Chicano cultural and political history in the United States. In 1970, after years of displacement by freeway and bridge construction, the Barrio Logan community reclaimed the land beneath the bridge through direct action, occupying the site until the city agreed to dedicate it as a park.</p>
+    <p>In the decades since, the park's towering concrete pylons have become canvases for the largest collection of outdoor murals in the country, depicting Mexican and Chicano history, Indigenous heritage, and the community's enduring struggle for justice. Today Chicano Park is recognized as a National Historic Landmark.</p>
+  </div>
+  <img src="assets/img/mural-2.jpg" alt="Murals on the pylons of Chicano Park">
+</div></section>
+
+<section class="section alt"><div class="wrap">
+  <h2>The Izcalli Mural</h2>
+  <p class="lead" style="max-width:74ch">Izcalli's mural is part of this living gallery, carrying the organization's name and its Maya-Nahua imagery into the cultural landscape of Barrio Logan. It stands where Izcalli's youth theater takes the stage and where the community gathers each year for Chicano Park Day, connecting Izcalli's cultural-healing work to the park's history of resistance and renewal.</p>
+  <div class="gallery">
+    <figure><img src="assets/img/mural.jpg" alt="The Izcalli mural at Chicano Park during restoration"><figcaption>The Izcalli mural at Chicano Park, undergoing restoration.</figcaption></figure>
+    <figure><img src="assets/img/mural-restoration.jpg" alt="Restoring the Izcalli mural"><figcaption>Community artists restoring the mural.</figcaption></figure>
+    <figure><img src="assets/img/mural-2.jpg" alt="Murals at Chicano Park"><figcaption>Izcalli's mural among the murals of Chicano Park.</figcaption></figure>
+  </div>
+  <div class="note" style="margin-top:24px">We're adding the full history of the mural and the artists who created and restored it. Check back soon.</div>
+</div></section>
+"""
+page("mural", "The Izcalli Mural", mural)
 
 # ----------------------------------------------------------------------------
 # MEN'S GATHERING
@@ -274,7 +363,7 @@ mens = """
 <section class="section"><div class="wrap">
   <p class="kicker">A tradition since 1998</p>
   <h2>Multi-generational healing on Kumeyaay land</h2>
-  <p class="lead" style="max-width:72ch">What began in 1998 with roughly 100 men has grown into a multi-generational gathering at the Manzanita Reservation. Grounded in the National Compadres Network tradition, it honors elders &mdash; Maestro Jos&eacute; Montoya, Jerry Tello, and others &mdash; and is paired with Cihua Ollin, the "movement of women."</p>
+  <p class="lead" style="max-width:72ch">What began in 1998 with roughly 100 men has grown into a multi-generational gathering at the Manzanita Reservation, paired with Cihua Ollin, the "movement of women."</p>
   <div class="note" style="margin-top:20px">This is a camping experience: full commitment from Friday evening through Sunday noon. Participants bring their own camping gear and supplies.</div>
   <p style="margin-top:28px"><a class="btn" href="https://forms.gle/FjAdQnE8hETpf9pB9">Register on the gathering form</a></p>
 </div></section>
@@ -304,7 +393,23 @@ research = """
   <img src="assets/img/approach-circle.jpg" alt="Izcalli healing circle in session">
 </div></section>
 
-<section class="section alt"><div class="wrap center">
+<section class="section alt"><div class="wrap">
+  <p class="kicker">The doctoral study behind the model</p>
+  <h2>"The Circle, Indigeneity, and Healing"</h2>
+  <p class="lead" style="max-width:74ch">Before the peer-reviewed article, Dr. Juvenal Caporale documented Izcalli's C&iacute;rculo de Hombres in his 2020 Ph.D. dissertation, <em>The Circle, Indigeneity, and Healing: Rehumanizing Chicano, Mexican, and Indigenous Men.</em></p>
+  <p style="max-width:74ch">Drawing on in-depth interviews with 50 longtime Circle members, the study examines how Chicano, Mexican, and Indigenous men use the healing circle to recover from street violence, incarceration, and self-destructive cycles &mdash; and to rehumanize themselves and their relationships. Its findings put numbers to what participants have always described: the Circle changes lives, and keeps them.</p>
+</div></section>
+
+<section class="section impact"><div class="wrap">
+  <p class="kicker center">What the research found &middot; Caporale, 2020 &middot; n=50</p>
+  <div class="grid">
+    <div class="stat"><div class="num">94%</div><div class="lbl">of members reported profound personal transformation</div></div>
+    <div class="stat"><div class="num">84%</div><div class="lbl">became more engaged in social justice</div></div>
+    <div class="stat"><div class="num">16.74 yrs</div><div class="lbl">average participation in the Circle (range: 1&ndash;27 years)</div></div>
+  </div>
+</div></section>
+
+<section class="section"><div class="wrap center">
   <p class="lead" style="max-width:64ch;margin:0 auto">Independent research affirms what our community has always known: when culture leads, healing follows.</p>
 </div></section>
 """
@@ -322,7 +427,7 @@ involved = """
 
 <section class="section"><div class="wrap">
   <div class="grid cols-2">
-    <div class="card"><img src="assets/img/cihua-ollin.jpg" alt="Training cohort"><div class="body">
+    <div class="card"><img src="assets/img/training.jpg" alt="Tlahtolli training circle"><div class="body">
       <h3>Request a training</h3>
       <p>Learn about bringing a Tlahtolli rites-of-passage training, restorative circle, or storytelling and theater workshop to your school or organization.</p>
       <p style="margin-top:16px"><a class="btn" href="contact.html">Request more information</a></p>
@@ -381,24 +486,6 @@ contact = """
     <p><label class="sans" style="font-size:.9rem">Message<br><textarea style="width:100%;padding:8px" rows="4" disabled placeholder="How can we help?"></textarea></label></p>
     <button class="btn" disabled>Send (prototype)</button>
   </div>
-</div></section>
-
-<section class="section alt"><div class="wrap">
-  <p class="kicker">Our People</p>
-  <h2>Board &amp; Staff</h2>
-  <h3 style="margin-top:18px">Executive Leadership</h3>
-  <ul class="clean">
-    <li><strong>Macedonio Arteaga Jr.</strong> &mdash; Co-Founder &amp; Executive Director. 21 years as Restorative Practices Pupil Advocate in SDUSD; National Trainer for the National Compadres Network; 2024 Prebys Leader in Belonging.</li>
-    <li><strong>Alicia Chavez-Arteaga</strong> &mdash; Co-Founder &amp; Director of Operations. MA Women's Studies, BS Social Work (SDSU); 20+ years nonprofit administration; leads compliance, finance, and logistics.</li>
-  </ul>
-  <h3 style="margin-top:24px">Board of Directors</h3>
-  <ul class="clean">
-    <li><strong>Mirna Hernandez</strong> &mdash; Board President (Assistant Principal, Escondido Union HSD).</li>
-    <li><strong>Viviana Ochoa, CPA</strong> &mdash; Treasurer (internal controls, SAIC; 25+ yrs audit/governance).</li>
-    <li><strong>Dr. Ryan Santos</strong> &mdash; Secretary (Principal, Bayfront Charter HS; Ph.D. Education).</li>
-    <li><strong>Dr. Francisco Mendoza, M.D.</strong> &mdash; Member (Lead Physician, AltaMed).</li>
-    <li><strong>Victor Chavez Jr.</strong> &mdash; Member (30 yrs nonprofit &amp; higher ed).</li>
-  </ul>
 </div></section>
 """
 page("contact", "Contact", contact)
