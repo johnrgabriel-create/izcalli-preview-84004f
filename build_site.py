@@ -21,13 +21,14 @@ NAV = [
     ("contact", "Contact"),
 ]
 
-def header(active):
+def header(active, home=False):
     links = "".join(
         f'<a href="{("index" if s=="index" else s)}.html"'
         f'{" class=\"active\"" if s==active else ""}>{l}</a>'
         for s, l in NAV
     )
-    return f"""<header class="site-header"><div class="wrap">
+    cls = "site-header home" if home else "site-header"
+    return f"""<header class="{cls}"><div class="wrap">
   <a class="brand" href="index.html"><img src="assets/img/logo.png" alt="Izcalli"></a>
   <nav class="nav">{links}
     <a class="btn" href="donate.html">Donate</a>
@@ -58,7 +59,63 @@ FOOTER = """<footer class="site-footer"><div class="wrap">
   </div>
 </div></footer>""".replace("%YEAR%", str(datetime.date.today().year))
 
-def page(slug, title, body, active=None):
+def strip(*imgs, cls=""):
+    """A row of real-moment photos placed under a program description.
+    imgs: (filename, alt) tuples. cls: optional modifier (e.g. "natural"
+    to show horizontal photos uncropped)."""
+    cells = "".join(f'<img src="assets/img/{s}" alt="{a}">' for s, a in imgs)
+    klass = "photo-strip" + (f" {cls}" if cls else "")
+    return f'<div class="{klass}">{cells}</div>'
+
+def gallery(*imgs):
+    """A 3-up grid of photos (taller cells than a strip). Each item is
+    (filename, alt) or (filename, alt, posclass); posclass anchors the
+    crop, e.g. "top" keeps heads in tall/portrait photos."""
+    cells = ""
+    for item in imgs:
+        s, a = item[0], item[1]
+        pos = item[2] if len(item) > 2 else ""
+        c = f' class="{pos}"' if pos else ""
+        cells += f'<figure><img src="assets/img/{s}" alt="{a}"{c}></figure>'
+    return f'<div class="gallery">{cells}</div>'
+
+def funders():
+    """Our Supporters wall. Each logo sits on its own card on a light section.
+    Logos are kept in their original brand colors (never recolored). Most funder
+    logos are full color and read on white cards; Prebys and Decolonizing Wealth
+    ship only as reverse (white/cream) wordmarks built for dark backgrounds, so
+    those two get a dark brand-ink card instead. The San Diego DA brand is a
+    round gold seal with no horizontal lockup (confirmed: their site/reports use
+    the seal plus typeset text), so its card pairs the seal with a name caption.
+    kind: "" normal logo, "dark" reverse logo on ink card, "seal" seal+caption.
+    Order: current funders first, then past supporters."""
+    items = [
+        ("prebys.svg", "Prebys Foundation", "dark"),
+        ("california-arts-council.svg", "California Arts Council", ""),
+        ("sd-district-attorney.png", "San Diego County District Attorney", "seal"),
+        ("decolonizing-wealth.svg", "Decolonizing Wealth Project", "dark"),
+        ("nalac.png", "National Association of Latino Arts and Cultures", ""),
+        ("san-diego-foundation.svg", "San Diego Foundation", ""),
+        ("city-of-san-diego.svg", "City of San Diego", ""),
+    ]
+    def cell(f, n, kind):
+        cls = "funder-card"
+        if kind == "dark":
+            cls += " funder-card--dark"
+        if kind == "seal":
+            cls += " funder-card--seal"
+            return (f'<div class="{cls}"><img src="assets/img/funders/{f}" alt="{n}">'
+                    f'<span class="funder-name">{n}</span></div>')
+        return f'<div class="{cls}"><img src="assets/img/funders/{f}" alt="{n}" title="{n}"></div>'
+    cells = "".join(cell(f, n, kind) for f, n, kind in items)
+    return f"""
+<section class="section funders-section"><div class="wrap center">
+  <h2>Our Supporters</h2>
+  <p class="muted" style="max-width:62ch;margin:0 auto">The foundations and public agencies whose grants make Izcalli's cultural-healing work possible.</p>
+  <div class="funders">{cells}</div>
+</div></section>"""
+
+def page(slug, title, body, active=None, is_home=False):
     active = active or slug
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -70,7 +127,7 @@ def page(slug, title, body, active=None):
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-{header(active)}
+{header(active, is_home)}
 {body}
 {FOOTER}
 </body>
@@ -86,7 +143,7 @@ home = """
 <section class="hero">
   <img src="assets/img/hero-circle.jpg" alt="Community gathered around a fire at night">
   <div class="overlay">
-    <h1>Culture is healing.</h1>
+    <h1>Culture is healing</h1>
     <p>Izcalli is a San Diego nonprofit serving Chicana/o and Indigenous communities through cultural arts, education, and healing circles &mdash; for more than 30 years.</p>
     <div class="cta-row">
       <a class="btn" href="programs.html">Our Programs</a>
@@ -97,23 +154,20 @@ home = """
 
 <section class="section">
   <div class="wrap center">
-    <p class="kicker">Our Mission</p>
     <p class="lead" style="max-width:64ch;margin:0 auto">The mission of Izcalli is to transform the lives of Chicana/o and Indigenous communities by promoting cultural consciousness through the arts, education, and community dialogue.</p>
   </div>
 </section>
 
 <section class="section alt">
   <div class="wrap">
-    <p class="kicker center">What We Do</p>
     <div class="grid cols-3">
-      <div class="card"><img src="assets/img/healing-circle.jpg" alt="Indigenous healing circle"><div class="body"><h3>Healing Circles</h3><p>Weekly Indigenous circles &mdash; C&iacute;rculo de Hombres and Cihua Ollin &mdash; in schools and community settings.</p></div></div>
-      <div class="card"><a href="programs.html"><img src="assets/img/restorative-theater.jpg" alt="Youth performing original theater at Chicano Park"></a><div class="body"><h3>Restorative Theater</h3><p>Youth from Barrio Logan and Logan Heights create and perform original theater on the theme of freedom at the Chicano Park Museum.</p></div></div>
-      <div class="card"><img src="assets/img/teatro.jpg" alt="Teatro Izcalli performers"><div class="body"><h3>Teatro Izcalli</h3><p>A Chicana/o comedy troupe carrying the tradition of La Carpa and Teatro Campesino since 1995.</p></div></div>
-      <div class="card"><img src="assets/img/training.jpg" alt="Tlahtolli training circle"><div class="body"><h3>Tlahtolli</h3><p>Restorative rites-of-passage curriculum and trainings for educators and community leaders.</p></div></div>
-      <div class="card"><img src="assets/img/hero-circle.jpg" alt="Annual Men's Gathering fire"><div class="body"><h3>Men's Gathering</h3><p>An annual multi-generational gathering on Kumeyaay land, paired with Cihua Ollin.</p></div></div>
-      <div class="card"><a href="mural.html"><img src="assets/img/mural.jpg" alt="The Izcalli mural at Chicano Park"></a><div class="body"><h3>The Izcalli Mural</h3><p>Our mural at Chicano Park carries Izcalli's name and Maya-Nahua imagery into the heart of Barrio Logan.</p></div></div>
+      <a class="card" href="programs.html#healing-circles"><img src="assets/img/healing-circle.jpg" alt="Indigenous healing circle"><div class="body"><h3>Healing Circles</h3><p>Weekly Indigenous circles &mdash; C&iacute;rculo de Hombres and Cihua Ollin &mdash; in schools and community settings.</p></div></a>
+      <a class="card" href="programs.html#restorative-theater"><img src="assets/img/restorative-theater.jpg" alt="Youth performing original theater at Chicano Park"><div class="body"><h3>Restorative Theater</h3><p>Youth from Barrio Logan and Logan Heights create and perform original theater on the theme of freedom at the Chicano Park Museum.</p></div></a>
+      <a class="card" href="programs.html#teatro"><img src="assets/img/teatro.jpg" alt="Teatro Izcalli performers"><div class="body"><h3>Teatro Izcalli</h3><p>A Chicana/o comedy troupe carrying the tradition of La Carpa and Teatro Campesino since 1995.</p></div></a>
+      <a class="card" href="programs.html#tlahtolli"><img src="assets/img/training.jpg" alt="Tlahtolli training circle"><div class="body"><h3>Tlahtolli Trainings</h3><p>Restorative rites-of-passage curriculum and trainings for educators and community leaders.</p></div></a>
+      <a class="card" href="mens-gathering.html"><img src="assets/img/hero-circle.jpg" alt="Annual Men's Gathering fire"><div class="body"><h3>Men's Gathering</h3><p>An annual multi-generational gathering on Kumeyaay land, paired with Cihua Ollin.</p></div></a>
+      <a class="card" href="mural.html"><img src="assets/img/mural-izcalli.jpg" alt="The Izcalli mural at Chicano Park"><div class="body"><h3>The Izcalli Mural</h3><p>The mural at Chicano Park honors our mission.</p></div></a>
     </div>
-    <p class="center" style="margin-top:28px"><a class="btn" href="programs.html">See all programs</a></p>
   </div>
 </section>
 
@@ -122,7 +176,7 @@ home = """
     <div class="grid">
       <div class="stat"><div class="num">30+</div><div class="lbl">years serving San Diego, since 1993</div></div>
       <div class="stat"><div class="num">~1,000</div><div class="lbl">people engage with Izcalli each year</div></div>
-      <div class="stat"><div class="num">5,700</div><div class="lbl">young people reached through our circles over 25 years</div></div>
+      <div class="stat"><div class="num">5,700</div><div class="lbl">young people reached through our circles</div></div>
     </div>
   </div>
 </section>
@@ -130,7 +184,6 @@ home = """
 <section class="section">
   <div class="wrap">
     <div class="calloutbox">
-      <p class="kicker">Featured</p>
       <h2 style="margin-bottom:.2em">28th Annual Men's Gathering</h2>
       <p class="lead">July 31 &ndash; August 2, 2026 &middot; Manzanita Reservation, Kumeyaay land</p>
       <p><a class="btn" href="mens-gathering.html">Learn more &amp; register</a></p>
@@ -138,15 +191,14 @@ home = """
   </div>
 </section>
 """
-page("index", "Home", home)
+page("index", "Home", home + funders(), is_home=True)
 
 # ----------------------------------------------------------------------------
 # ABOUT / OUR APPROACH
 # ----------------------------------------------------------------------------
 about = """
 <section class="pagehead"><div class="wrap">
-  <p class="kicker">About / Our Approach</p>
-  <h1>Knowledge of culture is the foundation of identity.</h1>
+  <h1>Izcalli: A House of Re-awakening for Cultural Consciousness and Collective Healing</h1>
   <p>Founded in 1993 by young Chicana/o activists, Izcalli began as the Escuelita &mdash; a Saturday school. More than 30 years later, that founding conviction remains at the center of everything we do.</p>
 </div></section>
 
@@ -163,7 +215,6 @@ about = """
 
 <section class="section alt">
   <div class="wrap">
-    <p class="kicker">Our People</p>
     <h2>Board &amp; Staff</h2>
     <h3 style="margin-top:18px">Executive Leadership</h3>
     <div class="bios">
@@ -211,15 +262,16 @@ about = """
 
 <section class="section">
   <div class="wrap">
-    <p class="kicker">Our Approach</p>
-    <h2>An Indigenous-led model of healing</h2>
+    <h2>Rehumanization through Indigeneity: Reclaiming Our Sacred Purpose and Inherent Worth</h2>
     <p class="lead" style="max-width:70ch">Izcalli heals intergenerational trauma and dehumanization &mdash; particularly among BIPOC youth &mdash; through a community-based, Indigenous-led model rooted in Maya-Nahua philosophy and a 7,000-year-old ma&iacute;z-based culture.</p>
+    <h3 style="margin-top:26px">The 7,000-Year-Old Story: Restoring Humanity through Ma&iacute;z-Based Philosophies</h3>
     <div class="pillars">
       <div class="pillar"><h3>Holistic healing</h3><p>Connecting physical, mental, emotional, and spiritual with community and the sacred &mdash; inherent wholeness, not symptom-suppression.</p></div>
       <div class="pillar"><h3>Palabra (dialogue &amp; truth)</h3><p>Honest dialogue in safe, substance-free spaces.</p></div>
       <div class="pillar"><h3>Challenging toxic masculinity</h3><p>C&iacute;rculo de Hombres builds vulnerability, humility, and critical consciousness.</p></div>
       <div class="pillar"><h3>Disrupting the school-to-prison pipeline</h3><p>Addressing dropout, criminalization, and self-destruction.</p></div>
       <div class="pillar"><h3>Youth voice</h3><p>Youth write and perform their own stories and help run the organization.</p></div>
+      <div class="pillar"><h3>Intergenerational by design</h3><p>Elders, parents, and youth share the same circle. Young people who grow up in Izcalli return as facilitators, mentors, and board members.</p></div>
       <div class="pillar"><h3>Elder-Youth epistemology &amp; the 7Rs</h3><p>Respect, reciprocity, relationship, responsibility, regeneration, resistance, resilience.</p></div>
     </div>
   </div>
@@ -255,62 +307,137 @@ about = """
   </div>
 </section>
 """
-page("about", "About", about)
+page("about", "About", about + funders())
 
 # ----------------------------------------------------------------------------
 # PROGRAMS
 # ----------------------------------------------------------------------------
 programs = """
 <section class="pagehead"><div class="wrap">
-  <p class="kicker">Programs</p>
-  <h1>Culture, healing, and youth leadership.</h1>
+  <h1>The Power of Palabra: Reclaiming Narratives to Transform Generations</h1>
   <p>Our programs meet youth and families where they are &mdash; in schools, on the land, and on stage.</p>
 </div></section>
 
-<section class="section"><div class="wrap split">
+<section class="section"><div class="wrap">
+  <blockquote class="pullquote feature">
+    &ldquo;There is no other work being done in our community with the profound impact on men. For over 25 years, I have joyfully seen the lives of teens, young adults and grandfathers changed. Embracing culture and the arts, theatre specifically, Izcalli has provided humor and healing needed in our community.&rdquo;
+    <cite>&mdash; California Assemblymember David Alvarez</cite>
+  </blockquote>
+</div></section>
+
+<section class="section" id="healing-circles"><div class="wrap">
+  <div class="split">
   <div>
     <h2>Weekly Indigenous Healing Circles</h2>
-    <p>C&iacute;rculo de Hombres and Cihua Ollin (C&iacute;rculo de Mujeres). Weekly, facilitator-led circles in schools and community settings using the traditional Popoxcomitl, plus field trips to the Manzanita reservation. Culturally responsive mental health support, especially for male-identifying youth (ages 14&ndash;24).</p>
+    <h3 class="tagline">Doing Things With People, Not To Them: A Restorative Model for Collective Well-being</h3>
+    <p>We hold weekly Indigenous healing circles, including C&iacute;rculo de Hombres for men. Facilitators lead them in schools and community settings, with field trips to the Manzanita reservation. The circles offer culturally responsive mental health support.</p>
+    <p>Many of the people facilitating circles today first sat in them as young participants. Since the 1990s, youth who grow up in Izcalli's circles have come back to lead circles of their own &mdash; so those guiding each circle have walked the same path as the young people in front of them.</p>
   </div>
   <img src="assets/img/healing-circle.jpg" alt="A weekly healing circle">
+  </div>
+  """ + strip(
+    ("circle-1.jpg", "A community healing circle gathered around a drum"),
+    ("circle-2.jpg", "A small circle of young people with a facilitator"),
+    ("circle-3.jpg", "Students in a classroom healing circle"),
+    ("circle-4.jpg", "A community circle beneath a Day of the Dead banner"),
+    ("circle-5.jpg", "A circle of young men with their elder facilitator on a university campus visit"),
+  ) + """
 </div></section>
 
-<section class="section alt"><div class="wrap split">
-  <img src="assets/img/cihua-ollin.jpg" alt="Tlahtolli cohort">
+<section class="section alt" id="tlahtolli"><div class="wrap">
+  <div class="split">
+  <img src="assets/img/training.jpg" alt="Tlahtolli training circle">
   <div>
     <h2>Tlahtolli &mdash; Restorative Rites of Passage</h2>
-    <p>Three-day trainings built on an evidence-based curriculum by Dr. Stan Rodriguez, for community leaders, professors, school staff, teachers, and arts educators. Launched June 2024.</p>
+    <p>Three-day trainings for community leaders, professors, school staff, teachers, and arts educators.</p>
+  </div>
+  </div>
+  """ + strip(
+    ("tlahtolli-1.jpg", "Participants at a Tlahtolli training working with Indigenous glyphs"),
+    ("tlahtolli-2.jpg", "A Tlahtolli training cohort gathered with ceremonial items"),
+    cls="natural",
+  ) + """
+  <div class="quote-pair">
+    <blockquote class="pullquote">
+      &ldquo;First of all, the entire training was very meaningful to me. Second, the part that I am walking away with the most is on building teacher capacity around the restorative lens and seeing kids as human. The changing mindsets piece is my goal for my school site this next academic year.&rdquo;
+      <cite>&mdash; 2024 Tlahtolli Training Participant</cite>
+    </blockquote>
+    <blockquote class="pullquote">
+      &ldquo;This program should be mandatory for any teacher to take as a part of their credentialing process. All teachers, admin, and teaching artists should take this course before they make their way into the classroom.&rdquo;
+      <cite>&mdash; 2024 Tlahtolli Training Participant</cite>
+    </blockquote>
   </div>
 </div></section>
 
-<section class="section"><div class="wrap split">
+<section class="section" id="teatro"><div class="wrap">
+  <div class="split">
   <div>
     <h2>Teatro Izcalli</h2>
-    <p>A Chicana/o comedy troupe (since 1995) honoring La Carpa and Teatro Campesino, with multi-state tours &mdash; San Diego, El Centro, Modesto, Denver, and Arizona State University &mdash; reaching about 4,500 people per touring year.</p>
+    <p>A Chicana/o comedy troupe (since 1995) honoring La Carpa and Teatro Campesino.</p>
   </div>
   <img src="assets/img/teatro.jpg" alt="Teatro Izcalli">
+  </div>
+  """ + strip(
+    ("teatro-1.jpg", "Teatro Izcalli performing on the Chicano Park backdrop"),
+    ("teatro-2.jpg", "An outdoor Teatro Izcalli performance at Chicano Park"),
+    ("teatro-3.jpg", "Teatro Izcalli rehearsing a scene"),
+  ) + """
 </div></section>
 
-<section class="section alt"><div class="wrap split">
+<section class="section alt" id="restorative-theater"><div class="wrap">
+  <div class="split">
   <img src="assets/img/restorative-theater.jpg" alt="Youth performing original theater at Chicano Park">
   <div>
     <h2>Restorative Theater &mdash; Youth Theater at Chicano Park</h2>
-    <p>In partnership with the Chicano Park Museum and Cultural Center, Izcalli brings young people from Barrio Logan and Logan Heights together to create and perform original live theater on the theme of freedom. Guided by professional teaching artists using the Tlahtolli curriculum &mdash; Izcalli's evidence-based, culturally responsive Creative Youth Development framework &mdash; participants (ages 11&ndash;22) develop artistic voice, claim the stage, and speak their truth to thousands of community members.</p>
-    <p>Culminating performances at Barrio Station and Chicano Park Day put youth in front of broad San Diego audiences, transforming the narrative of their neighborhoods from one of burden to one of resilience and self-determination. Returning participants step into student leadership, mentoring peers and running production.</p>
+    <p>In partnership with the Chicano Park Museum and Cultural Center, Izcalli brings young people from Barrio Logan and Logan Heights together to create and perform original live theater on the theme of freedom. Guided by professional teaching artists using the Tlahtolli curriculum &mdash; Izcalli's evidence-based, culturally responsive framework &mdash; participants (ages 11&ndash;22) develop artistic voice, claim the stage, and speak their truth.</p>
   </div>
+  </div>
+  """ + strip(
+    ("theater-1.jpg", "Youth performing original theater on stage"),
+    ("theater-2.jpg", "The youth cast gathered in a circle backstage"),
+    ("theater-3.jpg", "Young performers in costume with a teaching artist"),
+    ("theater-4.jpg", "Youth preparing backstage before a performance"),
+  ) + """
 </div></section>
 
-<section class="section"><div class="wrap split">
-  <img src="assets/img/youth.jpg" alt="Youth at a gathering">
-  <div>
-    <h2>Youth Leadership</h2>
-    <p>Youth shape program design, budgeting, fundraising, social media, and documentation, and grow into student leaders and facilitators across Izcalli's programs.</p>
-  </div>
+<section class="section" id="youth-leadership"><div class="wrap">
+  <h2>Youth Leadership</h2>
+  <h3 class="tagline">Planting the Seed of Re-awakening: Cultivating Identity and Resilience from Within</h3>
+  <p>Youth shape program design, budgeting, fundraising, social media, and documentation, and grow into student leaders and facilitators across Izcalli's programs.</p>
+  <p>A Youth Steering Committee formalizes the youth leadership process, giving young people a structured role in guiding Izcalli's direction. Many of the youth who grow up in the program go on to become circle facilitators, community and social-justice advocates, and members of Izcalli's board.</p>
+  """ + strip(
+    ("comm-youth-1.jpg", "A youth cohort with their certificates"),
+    ("comm-youth-2.jpg", "Izcalli youth on a recent trip together"),
+    ("comm-youth-3.jpg", "Youth leadership camp group photo"),
+    ("comm-youth-4.jpg", "Youth leaders posing together outdoors"),
+    ("comm-youth-6.jpg", "Youth with an Izcalli elder and mentor"),
+  ) + """
 </div></section>
 
 <section class="section alt"><div class="wrap">
   <h2>Cultural events &amp; traditions</h2>
   <p class="lead" style="max-width:72ch">A non-commercialized annual Day of the Dead celebration, traditional instrument-making (Huehuetl, Teponaxtli), songs, storytelling, beadwork, woodcarving, regalia (Tilma), and inter-tribal ceremonies.</p>
+  """ + gallery(
+    ("comm-culture-1.jpg", "A community ceremony with danza at the cultural center"),
+    ("comm-culture-2.jpg", "A drum circle at the cultural center"),
+    ("comm-culture-3.jpg", "A youth group with a Day of the Dead altar"),
+    ("comm-culture-4.jpg", "Children and a mentor making art together at a workshop", "top"),
+    ("comm-culture-5.jpg", "A hands-on workshop at a community event"),
+  ) + """
+  <p class="muted" style="max-width:72ch;margin-top:34px">Families and youth working the soil together and gathering for multi-generational retreats on Kumeyaay land &mdash; growing food, building the temazcal, and ceremony at sunrise.</p>
+  """ + gallery(
+    ("comm-garden-1.jpg", "Children planting seedlings in a raised bed", "top"),
+    ("comm-garden-2.jpg", "A father holding his child in the garden", "top"),
+    ("comm-garden-3.jpg", "A youth and a mentor working at the garden bed", "top"),
+    ("comm-garden-4.jpg", "Youth tending the garden beds together"),
+    ("comm-garden-5.jpg", "A child planting a seedling in the soil"),
+    ("comm-retreat-1.jpg", "An elder leading ceremony at sunrise on the land"),
+    ("comm-retreat-2.jpg", "A father and son at the land retreat"),
+    ("comm-retreat-3.jpg", "A mentor and youth at the land retreat", "top"),
+    ("comm-retreat-4.jpg", "Generations walking together at the retreat"),
+    ("comm-retreat-5.jpg", "Community members building the temazcal together"),
+    ("comm-retreat-6.jpg", "Youth sharing a meal at the camp table"),
+  ) + """
 </div></section>
 """
 page("programs", "Programs", programs)
@@ -320,8 +447,7 @@ page("programs", "Programs", programs)
 # ----------------------------------------------------------------------------
 mural = """
 <section class="pagehead"><div class="wrap">
-  <p class="kicker">The Izcalli Mural</p>
-  <h1>Our name lives at Chicano Park.</h1>
+  <h1>Our name lives at Chicano Park</h1>
   <p>In the heart of Barrio Logan, Izcalli's mural takes its place among the most storied murals in the country.</p>
 </div></section>
 
@@ -331,18 +457,27 @@ mural = """
     <p>Beneath the San Diego&ndash;Coronado Bridge in Barrio Logan lies Chicano Park, one of the most significant sites of Chicano cultural and political history in the United States. In 1970, after years of displacement by freeway and bridge construction, the Barrio Logan community reclaimed the land beneath the bridge through direct action, occupying the site until the city agreed to dedicate it as a park.</p>
     <p>In the decades since, the park's towering concrete pylons have become canvases for the largest collection of outdoor murals in the country, depicting Mexican and Chicano history, Indigenous heritage, and the community's enduring struggle for justice. Today Chicano Park is recognized as a National Historic Landmark.</p>
   </div>
-  <img src="assets/img/mural-2.jpg" alt="Murals on the pylons of Chicano Park">
+  <img src="assets/img/mural.jpg" alt="The Izcalli mural beneath the bridge at Chicano Park">
 </div></section>
 
 <section class="section alt"><div class="wrap">
   <h2>The Izcalli Mural</h2>
   <p class="lead" style="max-width:74ch">Izcalli's mural is part of this living gallery, carrying the organization's name and its Maya-Nahua imagery into the cultural landscape of Barrio Logan. It stands where Izcalli's youth theater takes the stage and where the community gathers each year for Chicano Park Day, connecting Izcalli's cultural-healing work to the park's history of resistance and renewal.</p>
+  <figure class="mural-pano">
+    <img src="assets/img/mural-izcalli.jpg" alt="The full Izcalli mural beneath the San Diego&ndash;Coronado Bridge at Chicano Park, spelling out IZCALLI across the bridge support">
+    <figcaption>Izcalli's mural beneath the San Diego&ndash;Coronado Bridge at Chicano Park.</figcaption>
+  </figure>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <h2>The artists at work</h2>
+  <p class="lead" style="max-width:74ch">Izcalli's mural is painted and renewed by community artists. These images capture the work in progress, high on the scaffolding beneath the bridge.</p>
   <div class="gallery">
-    <figure><img src="assets/img/mural.jpg" alt="The Izcalli mural at Chicano Park during restoration"><figcaption>The Izcalli mural at Chicano Park, undergoing restoration.</figcaption></figure>
-    <figure><img src="assets/img/mural-restoration.jpg" alt="Restoring the Izcalli mural"><figcaption>Community artists restoring the mural.</figcaption></figure>
-    <figure><img src="assets/img/mural-2.jpg" alt="Murals at Chicano Park"><figcaption>Izcalli's mural among the murals of Chicano Park.</figcaption></figure>
+    <figure><img src="assets/img/mural-art-1.jpg" alt="An artist painting the golden eagle of the Izcalli mural"></figure>
+    <figure><img src="assets/img/mural-art-2.jpg" alt="An artist painting from the scaffold"></figure>
+    <figure><img src="assets/img/mural-art-4.jpg" alt="An artist on the scaffold against the blue mural panels"></figure>
+    <figure><img src="assets/img/mural-art-3.jpg" alt="The community artist crew in front of the finished mural"></figure>
   </div>
-  <div class="note" style="margin-top:24px">We're adding the full history of the mural and the artists who created and restored it. Check back soon.</div>
 </div></section>
 """
 page("mural", "The Izcalli Mural", mural)
@@ -361,11 +496,70 @@ mens = """
 </section>
 
 <section class="section"><div class="wrap">
-  <p class="kicker">A tradition since 1998</p>
   <h2>Multi-generational healing on Kumeyaay land</h2>
-  <p class="lead" style="max-width:72ch">What began in 1998 with roughly 100 men has grown into a multi-generational gathering at the Manzanita Reservation, paired with Cihua Ollin, the "movement of women."</p>
-  <div class="note" style="margin-top:20px">This is a camping experience: full commitment from Friday evening through Sunday noon. Participants bring their own camping gear and supplies.</div>
-  <p style="margin-top:28px"><a class="btn" href="https://forms.gle/FjAdQnE8hETpf9pB9">Register on the gathering form</a></p>
+  <p class="lead" style="max-width:72ch">What began in 1998 with roughly 100 men has grown into a multi-generational gathering at the Manzanita Reservation, paired with Cihua Ollin, the "movement of women." Grandfathers, fathers, and sons sit in the same circle &mdash; the elders carry the songs and teachings, and the youngest learn by being there.</p>
+  <p style="max-width:72ch">Hello relatives, we are excited to announce our 28th Annual C&iacute;rculo de Hombres Men's Gathering. The gathering is held at the Manzanita Reservation, on land belonging to the Elliot family. There are important changes to this year's gathering, so please take time to read the information below.</p>
+  <figure class="mural-pano" style="margin-top:24px">
+    <img src="assets/img/intergen-fire.jpg" alt="Three generations gathered around the fire at night during the Annual Men's Gathering on Kumeyaay land">
+  </figure>
+  <div class="note" style="margin-top:20px">We ask all participants to commit to the whole ceremony: we arrive before sundown on Friday evening and remain until Sunday at noon. Please know that this is a <strong>camping experience</strong>.</div>
+  """ + strip(
+    ("mens-2.jpg", "Men gathered around the fire at night to sing and pray"),
+    ("mens-1.jpg", "A drum circle singing at the gathering"),
+    ("mens-3.jpg", "A young child at the gathering on the land"),
+    ("mens-4.jpg", "A ceremonial fire at the gathering"),
+  ) + """
+  <p style="margin-top:28px"><a class="btn" href="https://forms.gle/FjAdQnE8hETpf9pB9">Register here</a></p>
+</div></section>
+
+<section class="section alt"><div class="wrap">
+  <h2>What to bring</h2>
+  <div class="grid cols-2">
+    <div>
+      <h3>Camping items</h3>
+      <ul>
+        <li>Camping chair</li>
+        <li>Camping tent</li>
+        <li>Water bottle</li>
+        <li>Sleeping bag or blankets</li>
+        <li>Personal hygiene items (toothbrush, etc.)</li>
+        <li>Clothing &mdash; consider a sweatshirt or jacket for the evening</li>
+      </ul>
+    </div>
+    <div>
+      <h3>For the Sweat Lodge Ceremony</h3>
+      <ul>
+        <li>Shorts and a towel</li>
+        <li>Sacred items for the community altar</li>
+        <li>Small giveaways for fire-keepers, cooks, elders, and loved ones</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <h2>Directions from San Diego</h2>
+  <ol style="max-width:72ch;line-height:1.7">
+    <li>Get on the 8 East freeway.</li>
+    <li>Take Exit 61 for Live Oak Springs.</li>
+    <li>Turn RIGHT on Crestwood Rd. and continue onto Old HWY 80.</li>
+    <li>Take a LEFT on Live Oak Trail (you will see the Live Oak Market on the right).</li>
+    <li>Continue on Live Oak Trail; it will eventually turn into Manzanita Road.</li>
+    <li>Stay on Manzanita Road for about 6 miles.</li>
+    <li>Once the street turns into a dirt road, drive 50 yards forward.</li>
+    <li>Take your first RIGHT (look for red flags posted on the front gate).</li>
+    <li>Drive into the land about 500 yards, look for cars, and find a spot to park.</li>
+  </ol>
+  <div class="note" style="margin-top:20px"><strong>Important:</strong> there is no cell service on many parts of the reservation, including where the gathering takes place. In case of a family emergency, contact Sam Elliot at (619) 540-1005.</div>
+</div></section>
+
+<section class="section alt"><div class="wrap" style="max-width:820px">
+  <h2>Words from our organizers</h2>
+  <p>This is our 28th year!!! Even though 28 years may seem like a long time, we acknowledge that gathering to share palabra in c&iacute;rculo has been part of our sacred heritage since time immemorial. The Men's Gathering is an opportunity for male-identifying relatives to experience story, laughter, ceremony, and reflection through an intercambio of words, feelings, pain, joy, and spiritual energy.</p>
+  <p>This tradition, handed down by ancestors, elders, grandparents, and families, is our way of cleansing from the false teachings and woundedness that have become part of our lives. We invite you to join us, and we look forward to sharing space together to continue these teachings for generations to come.</p>
+  <p>The San Diego C&iacute;rculo de Hombres Men's Gathering is coordinated through Izcalli and the National Compadres Network. We hold immense gratitude for our Kumeyaay relatives and tribal communities who have allowed us to continue this sacred tradition on Kumeyaay land.</p>
+  <p class="muted">&mdash; Izcalli</p>
+  <p style="margin-top:24px"><a class="btn" href="https://forms.gle/FjAdQnE8hETpf9pB9">Register for the 28th Annual Men's Gathering</a></p>
 </div></section>
 """
 page("mens-gathering", "Annual Men's Gathering", mens)
@@ -375,9 +569,17 @@ page("mens-gathering", "Annual Men's Gathering", mens)
 # ----------------------------------------------------------------------------
 research = """
 <section class="pagehead"><div class="wrap">
-  <p class="kicker">Research &amp; Evidence</p>
-  <h1>Our model, studied and published.</h1>
+  <h1>Our model, studied and published</h1>
   <p>Izcalli's healing-circle approach is the subject of independent academic research &mdash; evidence that cultural, community-led practice changes lives.</p>
+</div></section>
+
+<section class="section impact"><div class="wrap">
+  <p class="kicker center">What the research found &middot; Caporale, 2020 &middot; n=50</p>
+  <div class="grid">
+    <div class="stat"><div class="num">94%</div><div class="lbl">of members reported profound personal transformation</div></div>
+    <div class="stat"><div class="num">84%</div><div class="lbl">became more engaged in social justice</div></div>
+    <div class="stat"><div class="num">16.74 yrs</div><div class="lbl">average participation in the Circle (range: 1&ndash;27 years)</div></div>
+  </div>
 </div></section>
 
 <section class="section"><div class="wrap split">
@@ -394,19 +596,9 @@ research = """
 </div></section>
 
 <section class="section alt"><div class="wrap">
-  <p class="kicker">The doctoral study behind the model</p>
   <h2>"The Circle, Indigeneity, and Healing"</h2>
   <p class="lead" style="max-width:74ch">Before the peer-reviewed article, Dr. Juvenal Caporale documented Izcalli's C&iacute;rculo de Hombres in his 2020 Ph.D. dissertation, <em>The Circle, Indigeneity, and Healing: Rehumanizing Chicano, Mexican, and Indigenous Men.</em></p>
   <p style="max-width:74ch">Drawing on in-depth interviews with 50 longtime Circle members, the study examines how Chicano, Mexican, and Indigenous men use the healing circle to recover from street violence, incarceration, and self-destructive cycles &mdash; and to rehumanize themselves and their relationships. Its findings put numbers to what participants have always described: the Circle changes lives, and keeps them.</p>
-</div></section>
-
-<section class="section impact"><div class="wrap">
-  <p class="kicker center">What the research found &middot; Caporale, 2020 &middot; n=50</p>
-  <div class="grid">
-    <div class="stat"><div class="num">94%</div><div class="lbl">of members reported profound personal transformation</div></div>
-    <div class="stat"><div class="num">84%</div><div class="lbl">became more engaged in social justice</div></div>
-    <div class="stat"><div class="num">16.74 yrs</div><div class="lbl">average participation in the Circle (range: 1&ndash;27 years)</div></div>
-  </div>
 </div></section>
 
 <section class="section"><div class="wrap center">
@@ -420,22 +612,26 @@ page("research", "Research", research)
 # ----------------------------------------------------------------------------
 involved = """
 <section class="pagehead"><div class="wrap">
-  <p class="kicker">Get Involved</p>
-  <h1>Bring Izcalli to your school or community.</h1>
-  <p>Two simple ways to start the conversation.</p>
+  <h1>Bring Izcalli to your school or community</h1>
+  <p>Three simple ways to start the conversation.</p>
 </div></section>
 
 <section class="section"><div class="wrap">
-  <div class="grid cols-2">
+  <div class="grid cols-3">
     <div class="card"><img src="assets/img/training.jpg" alt="Tlahtolli training circle"><div class="body">
       <h3>Request a training</h3>
       <p>Learn about bringing a Tlahtolli rites-of-passage training, restorative circle, or storytelling and theater workshop to your school or organization.</p>
       <p style="margin-top:16px"><a class="btn" href="contact.html">Request more information</a></p>
     </div></div>
     <div class="card"><img src="assets/img/healing-circle.jpg" alt="Healing circle"><div class="body">
-      <h3>Request a circle at your school or program</h3>
+      <h3>Request a circle at your site</h3>
       <p>Ask about hosting a weekly C&iacute;rculo de Hombres or Cihua Ollin healing circle for the youth you serve.</p>
       <p style="margin-top:16px"><a class="btn" href="contact.html">Request information about a circle</a></p>
+    </div></div>
+    <div class="card"><img src="assets/img/restorative-theater.jpg" alt="Youth performing original theater at Chicano Park"><div class="body">
+      <h3>Request a restorative theater program at your site</h3>
+      <p>Bring Izcalli's youth restorative theater &mdash; original performance guided by the Tlahtolli curriculum &mdash; to the young people you serve.</p>
+      <p style="margin-top:16px"><a class="btn" href="contact.html">Request information about a program</a></p>
     </div></div>
   </div>
   <p class="center" style="margin-top:32px">You can also <a href="mens-gathering.html">attend the Annual Men's Gathering</a> or <a href="donate.html">support our work</a>.</p>
@@ -448,8 +644,7 @@ page("get-involved", "Get Involved", involved)
 # ----------------------------------------------------------------------------
 donate = """
 <section class="pagehead"><div class="wrap">
-  <p class="kicker">Donate</p>
-  <h1>Support cultural healing in San Diego.</h1>
+  <h1>Support cultural healing in San Diego</h1>
 </div></section>
 
 <section class="section"><div class="wrap" style="max-width:760px">
@@ -465,8 +660,7 @@ page("donate", "Donate", donate, active="index")
 # ----------------------------------------------------------------------------
 contact = """
 <section class="pagehead"><div class="wrap">
-  <p class="kicker">Contact</p>
-  <h1>Reach out.</h1>
+  <h1>Reach out</h1>
   <p>We'd love to hear from you &mdash; whether you're a young person, a family, an educator, or a partner.</p>
 </div></section>
 
