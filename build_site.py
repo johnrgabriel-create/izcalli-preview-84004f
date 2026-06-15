@@ -54,8 +54,7 @@ FOOTER = """<footer class="site-footer"><div class="wrap">
     </div>
   </div>
   <div class="bottom">
-    <span>&copy; %YEAR% Izcalli. A federally recognized 501(c)(3) since 2004 &middot; EIN 33-0971908.</span>
-    <span>Prototype &mdash; content under review.</span>
+    <span>&copy; %YEAR% Izcalli. A federally recognized 501(c)(3) since 2004 &middot; EIN 33-0971908</span>
   </div>
 </div></footer>""".replace("%YEAR%", str(datetime.date.today().year))
 
@@ -110,7 +109,7 @@ def funders():
     cells = "".join(cell(f, n, kind) for f, n, kind in items)
     return f"""
 <section class="section funders-section"><div class="wrap center">
-  <h2>Our Supporters</h2>
+  <h2>Our supporters</h2>
   <p class="muted" style="max-width:62ch;margin:0 auto">The foundations and public agencies whose grants make Izcalli's cultural-healing work possible.</p>
   <div class="funders">{cells}</div>
 </div></section>"""
@@ -161,12 +160,12 @@ home = """
 <section class="section alt">
   <div class="wrap">
     <div class="grid cols-3">
-      <a class="card" href="programs.html#healing-circles"><img src="assets/img/healing-circle.jpg" alt="Indigenous healing circle"><div class="body"><h3>Healing Circles</h3><p>Weekly Indigenous circles &mdash; C&iacute;rculo de Hombres and Cihua Ollin &mdash; in schools and community settings.</p></div></a>
-      <a class="card" href="programs.html#restorative-theater"><img src="assets/img/restorative-theater.jpg" alt="Youth performing original theater at Chicano Park"><div class="body"><h3>Restorative Theater</h3><p>Youth from Barrio Logan and Logan Heights create and perform original theater on the theme of freedom at the Chicano Park Museum.</p></div></a>
+      <a class="card" href="programs.html#healing-circles"><img src="assets/img/healing-circle.jpg" alt="Indigenous healing circle"><div class="body"><h3>Healing circles</h3><p>Weekly Indigenous circles &mdash; C&iacute;rculo de Hombres and Cihua Ollin &mdash; in schools and community settings.</p></div></a>
+      <a class="card" href="programs.html#restorative-theater"><img src="assets/img/restorative-theater.jpg" alt="Youth performing original theater at Chicano Park"><div class="body"><h3>Restorative theater</h3><p>Youth from Barrio Logan and Logan Heights create and perform original theater on the theme of freedom at the Chicano Park Museum.</p></div></a>
       <a class="card" href="programs.html#teatro"><img src="assets/img/teatro.jpg" alt="Teatro Izcalli performers"><div class="body"><h3>Teatro Izcalli</h3><p>A Chicana/o comedy troupe carrying the tradition of La Carpa and Teatro Campesino since 1995.</p></div></a>
-      <a class="card" href="programs.html#tlahtolli"><img src="assets/img/training.jpg" alt="Tlahtolli training circle"><div class="body"><h3>Tlahtolli Trainings</h3><p>Restorative rites-of-passage curriculum and trainings for educators and community leaders.</p></div></a>
+      <a class="card" href="programs.html#tlahtolli"><img src="assets/img/training.jpg" alt="Tlahtolli training circle"><div class="body"><h3>Tlahtolli trainings</h3><p>Restorative rites-of-passage curriculum and trainings for educators and community leaders.</p></div></a>
       <a class="card" href="mens-gathering.html"><img src="assets/img/hero-circle.jpg" alt="Annual Men's Gathering fire"><div class="body"><h3>Men's Gathering</h3><p>An annual multi-generational gathering on Kumeyaay land, paired with Cihua Ollin.</p></div></a>
-      <a class="card" href="mural.html"><img src="assets/img/mural-izcalli.jpg" alt="The Izcalli mural at Chicano Park"><div class="body"><h3>The Izcalli Mural</h3><p>The mural at Chicano Park honors our mission.</p></div></a>
+      <a class="card" href="mural.html"><img src="assets/img/mural-izcalli.jpg" alt="The Izcalli mural at Chicano Park"><div class="body"><h3>The Izcalli mural</h3><p>The mural at Chicano Park honors our mission.</p></div></a>
     </div>
   </div>
 </section>
@@ -198,7 +197,7 @@ page("index", "Home", home + funders(), is_home=True)
 # ----------------------------------------------------------------------------
 about = """
 <section class="pagehead"><div class="wrap">
-  <h1>Izcalli: A House of Re-awakening for Cultural Consciousness and Collective Healing</h1>
+  <h1>Izcalli: a house of reawakening for cultural consciousness and collective healing</h1>
   <p>Founded in 1993 by young Chicana/o activists, Izcalli began as the Escuelita &mdash; a Saturday school. More than 30 years later, that founding conviction remains at the center of everything we do.</p>
 </div></section>
 
@@ -215,8 +214,8 @@ about = """
 
 <section class="section alt">
   <div class="wrap">
-    <h2>Board &amp; Staff</h2>
-    <h3 style="margin-top:18px">Executive Leadership</h3>
+    <h2>Board &amp; staff</h2>
+    <h3 style="margin-top:18px">Executive leadership</h3>
     <div class="bios">
       <div class="bio">
         <h3>Macedonio Arteaga Jr.</h3>
@@ -229,7 +228,7 @@ about = """
         <p>Alicia Chavez-Arteaga holds a Master of Arts in Women's Studies and a Bachelor of Science in Social Work, both from San Diego State University, and brings over 20 years of nonprofit administration experience to Izcalli's operations. As Director of Operations, she oversees compliance, financial systems, and program logistics. Earlier in her career she managed the wellness center at a San Diego high school, giving her firsthand operational knowledge of the school sites where Izcalli's circles are delivered. Her academic background in social work and gender equity ensures that Izcalli's programming is grounded in evidence-based frameworks and responsive to the specific needs of girls, non-binary youth, and others underserved by traditional mental health systems. As Director of Operations, Ms. Chavez-Arteaga is the organizational anchor ensuring Izcalli's work is executed with precision.</p>
       </div>
     </div>
-    <h3 style="margin-top:28px">Board of Directors</h3>
+    <h3 style="margin-top:28px">Board of directors</h3>
     <div class="bios">
       <div class="bio">
         <h3>Mirna Hernandez</h3>
@@ -262,9 +261,9 @@ about = """
 
 <section class="section">
   <div class="wrap">
-    <h2>Rehumanization through Indigeneity: Reclaiming Our Sacred Purpose and Inherent Worth</h2>
+    <h2>Rehumanization through Indigeneity: reclaiming our sacred purpose and inherent worth</h2>
     <p class="lead" style="max-width:70ch">Izcalli heals intergenerational trauma and dehumanization &mdash; particularly among BIPOC youth &mdash; through a community-based, Indigenous-led model rooted in Maya-Nahua philosophy and a 7,000-year-old ma&iacute;z-based culture.</p>
-    <h3 style="margin-top:26px">The 7,000-Year-Old Story: Restoring Humanity through Ma&iacute;z-Based Philosophies</h3>
+    <h3 style="margin-top:26px">The 7,000-year-old story: restoring humanity through ma&iacute;z-based philosophies</h3>
     <div class="pillars">
       <div class="pillar"><h3>Holistic healing</h3><p>Connecting physical, mental, emotional, and spiritual with community and the sacred &mdash; inherent wholeness, not symptom-suppression.</p></div>
       <div class="pillar"><h3>Palabra (dialogue &amp; truth)</h3><p>Honest dialogue in safe, substance-free spaces.</p></div>
@@ -279,7 +278,7 @@ about = """
 
 <section class="section alt">
   <div class="wrap">
-    <h2>Our Story</h2>
+    <h2>Our story</h2>
     <ul class="timeline">
       <li><span class="yr">1993</span> &mdash; Izcalli is founded as the Escuelita, a Saturday school by young Chicana/o activists.</li>
       <li><span class="yr">1995</span> &mdash; Teatro Izcalli, a Chicana/o comedy troupe, takes the stage.</li>
@@ -314,7 +313,7 @@ page("about", "About", about + funders())
 # ----------------------------------------------------------------------------
 programs = """
 <section class="pagehead"><div class="wrap">
-  <h1>The Power of Palabra: Reclaiming Narratives to Transform Generations</h1>
+  <h1>The power of palabra: reclaiming narratives to transform generations</h1>
   <p>Our programs meet youth and families where they are &mdash; in schools, on the land, and on stage.</p>
 </div></section>
 
@@ -328,8 +327,8 @@ programs = """
 <section class="section" id="healing-circles"><div class="wrap">
   <div class="split">
   <div>
-    <h2>Weekly Indigenous Healing Circles</h2>
-    <h3 class="tagline">Doing Things With People, Not To Them: A Restorative Model for Collective Well-being</h3>
+    <h2>Weekly Indigenous healing circles</h2>
+    <h3 class="tagline">Doing things with people, not to them: a restorative model for collective well-being</h3>
     <p>We hold weekly Indigenous healing circles, including C&iacute;rculo de Hombres for men. Facilitators lead them in schools and community settings, with field trips to the Manzanita reservation. The circles offer culturally responsive mental health support.</p>
     <p>Many of the people facilitating circles today first sat in them as young participants. Since the 1990s, youth who grow up in Izcalli's circles have come back to lead circles of their own &mdash; so those guiding each circle have walked the same path as the young people in front of them.</p>
   </div>
@@ -348,7 +347,7 @@ programs = """
   <div class="split">
   <img src="assets/img/training.jpg" alt="Tlahtolli training circle">
   <div>
-    <h2>Tlahtolli &mdash; Restorative Rites of Passage</h2>
+    <h2>Tlahtolli &mdash; restorative rites of passage</h2>
     <p>Three-day trainings for community leaders, professors, school staff, teachers, and arts educators.</p>
   </div>
   </div>
@@ -388,7 +387,7 @@ programs = """
   <div class="split">
   <img src="assets/img/restorative-theater.jpg" alt="Youth performing original theater at Chicano Park">
   <div>
-    <h2>Restorative Theater &mdash; Youth Theater at Chicano Park</h2>
+    <h2>Restorative theater &mdash; youth theater at Chicano Park</h2>
     <p>In partnership with the Chicano Park Museum and Cultural Center, Izcalli brings young people from Barrio Logan and Logan Heights together to create and perform original live theater on the theme of freedom. Guided by professional teaching artists using the Tlahtolli curriculum &mdash; Izcalli's evidence-based, culturally responsive framework &mdash; participants (ages 11&ndash;22) develop artistic voice, claim the stage, and speak their truth.</p>
   </div>
   </div>
@@ -401,8 +400,8 @@ programs = """
 </div></section>
 
 <section class="section" id="youth-leadership"><div class="wrap">
-  <h2>Youth Leadership</h2>
-  <h3 class="tagline">Planting the Seed of Re-awakening: Cultivating Identity and Resilience from Within</h3>
+  <h2>Youth leadership</h2>
+  <h3 class="tagline">Planting the seed of reawakening: cultivating identity and resilience from within</h3>
   <p>Youth shape program design, budgeting, fundraising, social media, and documentation, and grow into student leaders and facilitators across Izcalli's programs.</p>
   <p>A Youth Steering Committee formalizes the youth leadership process, giving young people a structured role in guiding Izcalli's direction. Many of the youth who grow up in the program go on to become circle facilitators, community and social-justice advocates, and members of Izcalli's board.</p>
   """ + strip(
@@ -448,7 +447,7 @@ page("programs", "Programs", programs)
 mural = """
 <section class="pagehead"><div class="wrap">
   <h1>Our name lives at Chicano Park</h1>
-  <p>In the heart of Barrio Logan, Izcalli's mural takes its place among the most storied murals in the country.</p>
+  <p>In the heart of Barrio Logan, Izcalli's mural was recently restored.</p>
 </div></section>
 
 <section class="section"><div class="wrap split">
@@ -461,7 +460,7 @@ mural = """
 </div></section>
 
 <section class="section alt"><div class="wrap">
-  <h2>The Izcalli Mural</h2>
+  <h2>The Izcalli mural</h2>
   <p class="lead" style="max-width:74ch">Izcalli's mural is part of this living gallery, carrying the organization's name and its Maya-Nahua imagery into the cultural landscape of Barrio Logan. It stands where Izcalli's youth theater takes the stage and where the community gathers each year for Chicano Park Day, connecting Izcalli's cultural-healing work to the park's history of resistance and renewal.</p>
   <figure class="mural-pano">
     <img src="assets/img/mural-izcalli.jpg" alt="The full Izcalli mural beneath the San Diego&ndash;Coronado Bridge at Chicano Park, spelling out IZCALLI across the bridge support">
@@ -527,7 +526,7 @@ mens = """
       </ul>
     </div>
     <div>
-      <h3>For the Sweat Lodge Ceremony</h3>
+      <h3>For the sweat lodge ceremony</h3>
       <ul>
         <li>Shorts and a towel</li>
         <li>Sacred items for the community altar</li>
@@ -634,7 +633,6 @@ involved = """
       <p style="margin-top:16px"><a class="btn" href="contact.html">Request information about a program</a></p>
     </div></div>
   </div>
-  <p class="center" style="margin-top:32px">You can also <a href="mens-gathering.html">attend the Annual Men's Gathering</a> or <a href="donate.html">support our work</a>.</p>
 </div></section>
 """
 page("get-involved", "Get Involved", involved)
