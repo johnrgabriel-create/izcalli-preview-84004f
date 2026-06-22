@@ -9,6 +9,19 @@ import os, datetime
 
 OUT = os.path.dirname(os.path.abspath(__file__))
 
+# --- Custom domain (GitHub Pages) -------------------------------------------
+# When this site is cut over to its real domain, GitHub Pages needs a CNAME file
+# in the published output naming the custom domain. Because build_site.py
+# regenerates the site on every run, the CNAME must be emitted here or it would
+# be wiped on the next rebuild. See the Domain Cutover Runbook (Phase 3/4).
+#
+# SAFETY GATE: keep this None until DNS is actually pointed at GitHub. Pushing a
+# live CNAME early flips GitHub Pages onto the custom domain before DNS resolves,
+# which breaks the preview URL and HTTPS. On cutover day, set:
+#     CUSTOM_DOMAIN = "izcalli.org"
+# then rebuild + push.
+CUSTOM_DOMAIN = None  # e.g. "izcalli.org" at cutover
+
 # nav: (slug, label)
 NAV = [
     ("index", "Home"),
@@ -681,5 +694,15 @@ contact = """
 </div></section>
 """
 page("contact", "Contact", contact)
+
+# Emit (or remove) the GitHub Pages CNAME file based on the safety gate above.
+cname_path = os.path.join(OUT, "CNAME")
+if CUSTOM_DOMAIN:
+    with open(cname_path, "w") as f:
+        f.write(CUSTOM_DOMAIN + "\n")
+    print("wrote CNAME ->", CUSTOM_DOMAIN)
+elif os.path.exists(cname_path):
+    os.remove(cname_path)
+    print("removed CNAME (CUSTOM_DOMAIN is off)")
 
 print("\nDone. Open index.html in a browser.")

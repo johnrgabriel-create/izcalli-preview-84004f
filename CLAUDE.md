@@ -37,6 +37,12 @@ Warm earth tones (maroon #6B2D1A, tan #C4844A, cream #F7F3ED), tasteful
 Indigenous motifs, real ceremony/gathering photography carries the site, program
 cards, prominent Donate, bilingual, strong "our approach" story for funders.
 
+## Build commands
+- **Site:** `python3 build_site.py` (single source of truth, 9 pages; never hand-edit generated HTML).
+- **Cutover runbook docx:** `NODE_PATH="$(npm root -g)" node build-cutover-runbook-docx.js`
+  — `docx` is installed GLOBALLY, not in this folder (no local node_modules), so
+  the `NODE_PATH` prefix is required or it fails with "Cannot find module 'docx'".
+
 ## Standing constraints
 - John is non-technical. Maintenance question (who edits, how often) still open.
 - Don't rush to build: content/design approved first, then polished artifacts.
