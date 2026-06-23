@@ -1,0 +1,42 @@
+name: Rebuild site from content
+
+  # When an editor saves in Decap, it commits a change to content/** (or
+  someone
+  # edits build_site.py / assets). This regenerates the HTML and commits it
+  back so
+  # GitHub Pages serves the update. The auto-commit only touches *.html, which
+  is
+  # NOT in the paths filter below, so it cannot trigger this workflow again.
+  on:
+    push:
+      branches: [main]
+      paths:
+        - 'content/**'
+        - 'build_site.py'
+        - 'assets/**'
+    workflow_dispatch:
+
+  permissions:
+    contents: write
+
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-python@v5
+          with:
+            python-version: '3.12'
+        - name: Build site
+          run: python3 build_site.py
+        - name: Commit regenerated HTML
+          run: |
+            git config user.name "izcalli-site-bot"
+            git config user.email "actions@github.com"
+            git add '*.html' CNAME 2>/dev/null || git add '*.html'
+            if git diff --cached --quiet; then
+              echo "No HTML changes to commit."
+            else
+              git commit -m "Rebuild HTML from content [skip ci]"
+              git push
+            fi
