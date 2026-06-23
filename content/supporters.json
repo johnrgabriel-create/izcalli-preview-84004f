@@ -1,0 +1,11 @@
+{
+  "supporters": [
+    { "logo": "prebys.svg", "name": "Prebys Foundation", "style": "dark" },
+    { "logo": "california-arts-council.svg", "name": "California Arts Council", "style": "" },
+    { "logo": "sd-district-attorney.png", "name": "San Diego County District Attorney", "style": "seal" },
+    { "logo": "decolonizing-wealth.svg", "name": "Decolonizing Wealth Project", "style": "dark" },
+    { "logo": "nalac.png", "name": "National Association of Latino Arts and Cultures", "style": "" },
+    { "logo": "san-diego-foundation.svg", "name": "San Diego Foundation", "style": "" },
+    { "logo": "city-of-san-diego.svg", "name": "City of San Diego", "style": "" }
+  ]
+}

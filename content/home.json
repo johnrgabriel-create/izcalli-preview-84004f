@@ -1,0 +1,13 @@
+{
+  "hero_heading": "Culture is healing",
+  "hero_intro": "Izcalli is a San Diego nonprofit serving Chicana/o and Indigenous communities through cultural arts, education, and healing circles &mdash; for more than 30 years.",
+  "mission_lead": "The mission of Izcalli is to transform the lives of Chicana/o and Indigenous communities by promoting cultural consciousness through the arts, education, and community dialogue.",
+  "stats": [
+    { "number": "30+", "label": "years serving San Diego, since 1993" },
+    { "number": "~1,000", "label": "people engage with Izcalli each year" },
+    { "number": "5,700", "label": "young people reached through our circles" }
+  ],
+  "event_title": "28th Annual Men's Gathering",
+  "event_dates": "July 31 &ndash; August 2, 2026 &middot; Manzanita Reservation, Kumeyaay land",
+  "event_cta_label": "Learn more &amp; register"
+}

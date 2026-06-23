@@ -5,9 +5,21 @@ Writes 8 standalone HTML files that open by double-click (no server needed).
 Content is the Phase-0 content map after John's red-line (2026-06-14).
 Rerun: python3 build_site.py
 """
-import os, datetime
+import os, datetime, json
 
 OUT = os.path.dirname(os.path.abspath(__file__))
+
+# --- Editable content (Decap CMS) -------------------------------------------
+# These JSON files are what the Decap web editor reads and writes. Keeping the
+# content here (instead of hardcoded below) is what lets a non-technical editor
+# change the homepage and supporters wall through the /admin panel. Edit the
+# JSON (or the admin panel), then this build regenerates the HTML.
+def _load(name):
+    with open(os.path.join(OUT, "content", name), encoding="utf-8") as f:
+        return json.load(f)
+
+HOME = _load("home.json")
+SUPPORTERS = _load("supporters.json")["supporters"]
 
 # --- Custom domain (GitHub Pages) -------------------------------------------
 # When this site is cut over to its real domain, GitHub Pages needs a CNAME file
@@ -101,24 +113,19 @@ def funders():
     the seal plus typeset text), so its card pairs the seal with a name caption.
     kind: "" normal logo, "dark" reverse logo on ink card, "seal" seal+caption.
     Order: current funders first, then past supporters."""
-    items = [
-        ("prebys.svg", "Prebys Foundation", "dark"),
-        ("california-arts-council.svg", "California Arts Council", ""),
-        ("sd-district-attorney.png", "San Diego County District Attorney", "seal"),
-        ("decolonizing-wealth.svg", "Decolonizing Wealth Project", "dark"),
-        ("nalac.png", "National Association of Latino Arts and Cultures", ""),
-        ("san-diego-foundation.svg", "San Diego Foundation", ""),
-        ("city-of-san-diego.svg", "City of San Diego", ""),
-    ]
+    items = [(s["logo"], s["name"], s.get("style", "")) for s in SUPPORTERS]
     def cell(f, n, kind):
+        # Decap stores newly uploaded logos as a full path (contains "/"); the
+        # original entries are bare filenames living in assets/img/funders.
+        src = f if "/" in f else f"assets/img/funders/{f}"
         cls = "funder-card"
         if kind == "dark":
             cls += " funder-card--dark"
         if kind == "seal":
             cls += " funder-card--seal"
-            return (f'<div class="{cls}"><img src="assets/img/funders/{f}" alt="{n}">'
+            return (f'<div class="{cls}"><img src="{src}" alt="{n}">'
                     f'<span class="funder-name">{n}</span></div>')
-        return f'<div class="{cls}"><img src="assets/img/funders/{f}" alt="{n}" title="{n}"></div>'
+        return f'<div class="{cls}"><img src="{src}" alt="{n}" title="{n}"></div>'
     cells = "".join(cell(f, n, kind) for f, n, kind in items)
     return f"""
 <section class="section funders-section"><div class="wrap center">
@@ -151,12 +158,17 @@ def page(slug, title, body, active=None, is_home=False):
 # ----------------------------------------------------------------------------
 # HOME
 # ----------------------------------------------------------------------------
-home = """
+_stats_html = "".join(
+    f'<div class="stat"><div class="num">{s["number"]}</div>'
+    f'<div class="lbl">{s["label"]}</div></div>'
+    for s in HOME["stats"]
+)
+home = f"""
 <section class="hero">
   <img src="assets/img/hero-circle.jpg" alt="Community gathered around a fire at night">
   <div class="overlay">
-    <h1>Culture is healing</h1>
-    <p>Izcalli is a San Diego nonprofit serving Chicana/o and Indigenous communities through cultural arts, education, and healing circles &mdash; for more than 30 years.</p>
+    <h1>{HOME["hero_heading"]}</h1>
+    <p>{HOME["hero_intro"]}</p>
     <div class="cta-row">
       <a class="btn" href="programs.html">Our Programs</a>
       <a class="btn ghost" href="get-involved.html">Get Involved</a>
@@ -166,7 +178,7 @@ home = """
 
 <section class="section">
   <div class="wrap center">
-    <p class="lead" style="max-width:64ch;margin:0 auto">The mission of Izcalli is to transform the lives of Chicana/o and Indigenous communities by promoting cultural consciousness through the arts, education, and community dialogue.</p>
+    <p class="lead" style="max-width:64ch;margin:0 auto">{HOME["mission_lead"]}</p>
   </div>
 </section>
 
@@ -186,9 +198,7 @@ home = """
 <section class="section impact">
   <div class="wrap">
     <div class="grid">
-      <div class="stat"><div class="num">30+</div><div class="lbl">years serving San Diego, since 1993</div></div>
-      <div class="stat"><div class="num">~1,000</div><div class="lbl">people engage with Izcalli each year</div></div>
-      <div class="stat"><div class="num">5,700</div><div class="lbl">young people reached through our circles</div></div>
+      {_stats_html}
     </div>
   </div>
 </section>
@@ -196,9 +206,9 @@ home = """
 <section class="section">
   <div class="wrap">
     <div class="calloutbox">
-      <h2 style="margin-bottom:.2em">28th Annual Men's Gathering</h2>
-      <p class="lead">July 31 &ndash; August 2, 2026 &middot; Manzanita Reservation, Kumeyaay land</p>
-      <p><a class="btn" href="mens-gathering.html">Learn more &amp; register</a></p>
+      <h2 style="margin-bottom:.2em">{HOME["event_title"]}</h2>
+      <p class="lead">{HOME["event_dates"]}</p>
+      <p><a class="btn" href="mens-gathering.html">{HOME["event_cta_label"]}</a></p>
     </div>
   </div>
 </section>
